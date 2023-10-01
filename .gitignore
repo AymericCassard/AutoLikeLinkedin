@@ -26,9 +26,12 @@ share/python-wheels/
 *.egg
 MANIFEST
 
-#Selenium webdriver files
+# Selenium webdriver files
 geckodriver.log
 
-#Venv folders
+# Venv folders
 bin/
 include/
+
+# Personal credentials
+credentials.py
