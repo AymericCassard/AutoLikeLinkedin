@@ -15,6 +15,8 @@ Build Selenium dependencies:
 
 pip install -r requirements.txt
 
+Enter your Linkedin credentials in ./src/credentials.py
+
 Run project:
 
 python ./src/main.py

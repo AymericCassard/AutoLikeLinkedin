@@ -16,6 +16,7 @@ eggs/
 .eggs/
 lib/
 lib64/
+lib64
 parts/
 sdist/
 var/
@@ -26,6 +27,9 @@ share/python-wheels/
 *.egg
 MANIFEST
 
+# VSCode venv config
+pyvenv.cfg
+
 # Selenium webdriver files
 geckodriver.log
 
@@ -34,4 +38,5 @@ bin/
 include/
 
 # Personal credentials
+./src/credentials.py
 credentials.py
