@@ -10,6 +10,9 @@ import time
 import credentials
 from BrowserSingleton import BrowserSingleton
 
+browser = BrowserSingleton()
+wait = WebDriverWait(browser, timeout=10)
+
 
 def waitAndClick(wait, clickable: WebElement):
     wait.until(lambda d: clickable.is_displayed())
@@ -53,29 +56,29 @@ def waitPostsCompletion():
     )
 
 
-browser = BrowserSingleton()
-browser.get("https://www.linkedin.com")
-title = browser.title
-wait = WebDriverWait(browser, timeout=10)
-# TODO turn company name into program arg
-WantedCompanyName = "Senhub.io"
+def login():
+    browser.get("https://www.linkedin.com")
+    wait.until(
+        lambda d: browser.find_element(
+            By.XPATH, value="//button[@type='submit']"
+        ).is_displayed()
+    )
 
-wait.until(
-    lambda d: browser.find_element(
-        By.XPATH, value="//button[@type='submit']"
-    ).is_displayed()
-)
+    loginForm = browser.find_element(By.ID, "session_key")
+    psswdForm = browser.find_element(By.ID, "session_password")
+    button = browser.find_element(By.XPATH, value="//button[@type='submit']")
 
-loginForm = browser.find_element(By.ID, "session_key")
-psswdForm = browser.find_element(By.ID, "session_password")
-button = browser.find_element(By.XPATH, value="//button[@type='submit']")
+    loginForm.send_keys(credentials.login)
+    psswdForm.send_keys(credentials.psswd)
+    button.click()
 
-loginForm.send_keys(credentials.login)
-psswdForm.send_keys(credentials.psswd)
-button.click()
+
+login()
 
 # pass captcha ;(
 # time.sleep(15)
+# TODO turn company name into program arg
+WantedCompanyName = "Senhub.io"
 
 # Profile picture click > into dropdown
 waitAndClick(wait, browser.find_element(By.ID, "ember15"))
@@ -140,23 +143,31 @@ postsList = waitPostsCompletion()
 print(postsList)
 print(len(postsList))
 
-for post in postsList:
-    buttons = post.find_elements(By.TAG_NAME, "button")
+
+def clickMatchingButton(buttons, action):
     for button in buttons:
-        if button.get_attribute("aria-pressed") == "false":
-            button.click()
-        # if button.get_attribute("aria-pressed") == "true":
-        # button.click()
-        else:
-            print("not LikeButton")
-    # for button in buttons:
-    # try:
-    #     likeButton = searchElement(wait, buttons, "aria-pressed", "false")
-    # except Exception:
-    #     print("likeButton was not found")
-    # if isinstance(buttons, WebElement):
-    #     print("1")
-    # else:
-    #     print(len(button))
+        if button.get_attribute("aria-pressed") is not None:
+            likeButton = button
+            break
+
+
+# for post in postsList:
+#     buttons = post.find_elements(By.TAG_NAME, "button")
+#     for button in buttons:
+#         if button.get_attribute("aria-pressed") == "false":
+#             button.click()
+#         if button.get_attribute("aria-pressed") == "true":
+#             button.click()
+#         else:
+#             print("not LikeButton")
+# for button in buttons:
+# try:
+#     likeButton = searchElement(wait, buttons, "aria-pressed", "false")
+# except Exception:
+#     print("likeButton was not found")
+# if isinstance(buttons, WebElement):
+#     print("1")
+# else:
+#     print(len(button))
 # waitAndClick(browser.find_element(By.PARTIAL_LINK_TEXT, "posts"))
 print("woohoo pas d'erreur")
